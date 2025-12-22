@@ -42,3 +42,4 @@ if __name__ == "__main__":
         mlflow.sklearn.log_model(model, "model")
 
     print("Training selesai dan berhasil dicatat MLflow.")
+

@@ -2,32 +2,32 @@ name: mlproject-ci
 
 on:
   push:
-    branches: ["main"]
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
-  run-mlproject:
+  train-model:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
+    - name: Checkout repository
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: "3.11"
+        python-version: '3.10'
 
-    - name: Install MLflow
+    - name: Install dependencies
       run: |
-        pip install mlflow pandas scikit-learn
+        pip install -r MLProject/requirements.txt
+        pip install mlflow
 
-    - name: Run MLflow Project
+    - name: Run training script
       run: |
-        mlflow run MLProject -P data_path=MLProject/dataset_preprocessing/spotify_preprocessed_train.csv
+        python MLProject/modelling.py --data_path MLProject/dataset_preprocessing/spotify_preprocessed_train.csv
 
-    - name: Upload artifacts
+    - name: Upload artifacts (mlruns)
       uses: actions/upload-artifact@v4
       with:
         name: mlflow-artifacts
-        path: mlruns/
+        path: mlruns
